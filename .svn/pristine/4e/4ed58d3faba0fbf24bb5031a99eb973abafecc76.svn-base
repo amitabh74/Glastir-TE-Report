@@ -1,0 +1,10 @@
+# Root logger option
+log4j.rootLogger=DEBUG, a
+ 
+log4j.appender.a.File=c:/temp/glastir-te-print.log
+ 
+# Direct log messages to stdout
+log4j.appender.a=org.apache.log4j.FileAppender
+log4j.appender.a.layout=org.apache.log4j.PatternLayout
+log4j.appender.a.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
+

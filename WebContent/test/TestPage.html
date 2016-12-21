@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="theme/default/style.css" type="text/css">
+<link rel="stylesheet" href="style.css" type="text/css">
+<style type="text/css">
+#wmc {
+	width: 90%;
+	height: 300px;
+}
+
+/* avoid pink tiles */
+.olImageLoadError {
+	background-color: transparent !important;
+}
+</style>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.0/dojo/dojo.js"
+	type="text/javascript"></script>
+<script src="lib/OpenLayers.js"></script>
+
+<script type="text/javascript">
+	// increase reload attempts 
+	OpenLayers.IMAGE_RELOAD_ATTEMPTS = 2;
+
+	var format = new OpenLayers.Format.WMC({
+		'layerOptions' : {
+			buffer : 0
+		}
+	});
+	var doc, context, map;
+
+	function init() {
+
+		var bounds = new OpenLayers.Bounds(
+                255709.297, 328418,
+                264005.406, 335438.187
+            );
+		var options = {
+			controls : [],
+			maxExtent : bounds,
+			maxResolution: 32.4066757812501,
+            projection: "EPSG:27700",
+            units: 'm',
+			allOverlays : true
+			
+		};
+		map = new OpenLayers.Map('map', options);
+
+		var buildings = new OpenLayers.Layer.WMS("LPIS",
+				"http://spatialvue.rmsi.com:8080/geoserver/rega/wms", {
+					LAYERS: 'rega:LPIS_Output',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					transparent:true,
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+		
+		var centroids = new OpenLayers.Layer.WMS("LPIS",
+				"http://spatialvue.rmsi.com:8080/geoserver/rega/wms", {
+					LAYERS: 'rega:LPIS_Centroids',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					transparent:true,
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+
+		/*var taxlot = new OpenLayers.Layer.WMS("tiger:poi - Tiled",
+				"http://localhost:8080/geoserver/tiger/wms", {
+					LAYERS : 'tiger:poi',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					//transparent:true,
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});*/
+
+		map.addLayers([ centroids,buildings]);
+		map.addControl(new OpenLayers.Control.PanZoomBar({
+			position : new OpenLayers.Pixel(2, 15)
+		}));
+		map.addControl(new OpenLayers.Control.LayerSwitcher());
+		map.addControl(new OpenLayers.Control.Navigation());
+		
+
+		map.zoomToExtent(bounds);
+
+		dojo.addOnLoad(sendForm);
+	};
+
+	function writeWMC() {
+		try {
+			var text = format.write(map);
+			return text;
+		} catch (err) {
+			alert(err);
+		}
+	}
+
+	function sendForm() {
+		var form = dojo.byId("printform");
+
+		dojo.connect(form, "onsubmit", function(event) {
+			//Stop the submit event since we want to control form submission.
+			dojo.stopEvent(event);
+			var wmc_text = writeWMC();
+			//alert(wmc_text);
+			document.getElementById('wmc').value = wmc_text;
+
+			var xhrArgs = {
+				form : dojo.byId("printform"),
+				handleAs : "text",
+				load : function(data) {
+					alert(data);
+				},
+				error : function(error) {
+					alert(error);
+				}
+			}
+			//Call the asynchronous xhrPost
+
+			var deferred = dojo.xhrPost(xhrArgs);
+		});
+	}
+</script>
+</head>
+<body onload="init()">
+	<h1 id="title">Print Map Test Page</h1>
+	<div id="map" class="smallmap"></div>
+	 <div id="scale">
+	<div id="print_panel" class="ppanel">
+		<form id="printform" action="/glastir-te-print/create">
+			<p>
+				<label>SRN : 100456789</label> <input type="hidden" id="srn"
+					name="srn" value="100456789" />
+
+			</p>
+			<p>
+				<label>Title</label> <input name="title" type="text" />
+			</p>
+			<p>
+				<label>Description</label> <input name="desc" type="text" />
+			</p>
+
+			<p>
+				<label>Size</label> <select name="papersize">
+					<option value="a3">A3</option>
+					<option value="a4">A4</option>
+				</select>
+			</p>
+			<p>
+
+				<label>Orientation</label> <select name="orientation">
+					<option value="landscape">Landscape</option>
+					<option value="portrait">Portrait</option>
+				</select>
+			</p>
+
+			<input type="hidden" id="wmc" name="wmc" />
+
+			<p>
+				<input type="submit" id="print" value="Print" />
+
+			</p>
+		</form>
+
+	</div>
+</body>
+</html>
+
+
+
+

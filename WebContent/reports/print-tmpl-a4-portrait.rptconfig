@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <list-property name="configVars">
+        <structure>
+            <property name="name">__isdisplay__imgurl_10_0</property>
+            <property name="value">yytu</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__desc_39_1</property>
+            <property name="value">tyyrtytr</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__title_64_2</property>
+            <property name="value">uytuytu</property>
+        </structure>
+        <structure>
+            <property name="name">title_64_3</property>
+            <property name="value">uytuytu</property>
+        </structure>
+        <structure>
+            <property name="name">title_64_type_</property>
+            <property name="value">string</property>
+        </structure>
+        <structure>
+            <property name="name">desc_39_4</property>
+            <property name="value">tyyrtytr</property>
+        </structure>
+        <structure>
+            <property name="name">desc_39_type_</property>
+            <property name="value">string</property>
+        </structure>
+        <structure>
+            <property name="name">imgurl_10_5</property>
+            <property name="value">yytu</property>
+        </structure>
+        <structure>
+            <property name="name">imgurl_10_type_</property>
+            <property name="value">string</property>
+        </structure>
+    </list-property>
+</report>

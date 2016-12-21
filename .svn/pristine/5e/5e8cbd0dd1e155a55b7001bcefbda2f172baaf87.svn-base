@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project name="Glastir-TE-Report" default="war">
+
+
+	<tstamp prefix="build-info">
+		<format property="current-date" pattern="d-MMMM-yyyy" locale="en" />
+		<format property="current-time" pattern="hh:mm:ss a z" locale="en" />
+		<format property="year-month-day" pattern="yyyy-MM-dd" locale="en" />
+	</tstamp>
+
+	<path id="compile.classpath">
+		<fileset dir="WebContent/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<mkdir dir="build/classes" />
+		<mkdir dir="dist" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac destdir="build/classes" debug="true" srcdir="src">
+			<classpath refid="compile.classpath" />
+		</javac>
+
+	</target>
+
+	<target name="war" depends="compile">
+
+		<war destfile="dist/glastir-te-print.war" webxml="WebContent/WEB-INF/web.xml">
+			<lib dir="WebContent/WEB-INF/lib">
+				<exclude name="servlet-api.jar" />
+			</lib>
+			<fileset dir="WebContent/WEB-INF">
+				<include name="messages/*.*" />			
+			</fileset>
+			<fileset dir="WebContent">
+				<include name="reports/*.*" />
+				<include name="test/**/*.*" />
+			</fileset>
+
+			<classes dir="classes" />
+			<manifest>
+				<attribute name="Built-Version" value="I9-1.0.patch.07032012" />
+				<attribute name="Built-On" value="${build-info.current-date}" />
+				<attribute name="Built-At" value="${build-info.current-time}" />
+			</manifest>
+		</war>
+		<copy todir="D:/apache-tomcat-7.0.25/webapps" file="dist/glastir-te-print.war" />
+	</target>
+
+	<target name="clean">
+		<delete dir="dist" />
+		<delete dir="build" />
+	</target>
+
+
+</project>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="theme/default/style.css" type="text/css">
+<link rel="stylesheet" href="style.css" type="text/css">
+<style type="text/css">
+#wmc {
+	width: 90%;
+	height: 300px;
+}
+
+/* avoid pink tiles */
+.olImageLoadError {
+	background-color: transparent !important;
+}
+</style>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.0/dojo/dojo.js"
+	type="text/javascript"></script>
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+
+<script type="text/javascript">
+	// increase reload attempts 
+	OpenLayers.IMAGE_RELOAD_ATTEMPTS = 2;
+
+	var format = new OpenLayers.Format.WMC({
+		'layerOptions' : {
+			buffer : 0
+		}
+	});
+	var doc, context, map;
+
+	function init() {
+var bounds = new OpenLayers.Bounds(
+                255709.297, 328418,
+                264005.406, 335438.187
+            );
+		var options = {
+			controls : [],
+			maxExtent : bounds,
+			maxResolution: 32.4066757812501,
+            projection: "EPSG:27700",
+            units: 'm',
+			allOverlays : true
+			
+		};
+		map = new OpenLayers.Map('map', options);
+
+		var Access_Land = new OpenLayers.Layer.WMS("Access_Land",
+				"http://rega:8080/geoserver/wms", {
+					
+					LAYERS: 'snpa:Access_Land_polygon',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					transparent:true,
+					
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					//opacity:0.4,
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+		//Access_Land.setOpacity(0.4);
+		/*var RoW_Path = new OpenLayers.Layer.WMS("RoW_Path",
+				"http://snpa.rmsi.com:8080/geoserver/wms", {
+					LAYERS: 'snpa:RoW_Paths',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					transparent:true,
+					
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					//opacity: 0.6,
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+	
+		//RoW_Path.setOpacity(0.6);
+		var Issue = new OpenLayers.Layer.WMS("Issue",
+				"http://snpa.rmsi.com:8080/geoserver/wms", {
+					LAYERS: 'snpa:Issues',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					transparent:true,
+					
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					//opacity: 0.4,
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+		
+		var AP = new OpenLayers.Layer.WMS("Aerial_Photography_2009",
+				"http://maps.nationalparks.gov.uk/geoserver/wms?", {
+					
+					LAYERS: 'snowdonia:SNPA_Aerial_Photography',
+					STYLES : '',
+					format : 'image/png',
+					tiled : true,
+					//transparent:true,
+					
+					tilesOrigin : map.maxExtent.left + ','
+							+ map.maxExtent.bottom
+				}, {
+					//opacity:1,
+					buffer : 0,
+					displayOutsideMaxExtent : true
+				});
+		//AP.setOpacity(1);
+		map.addLayers([AP,Access_Land,RoW_Path]);*/
+		
+		/*ap_wms = new OpenLayers.Layer.WMS(
+	            "Aerial_Photography_2009",
+	            "http://maps.nationalparks.gov.uk/geoserver/wms?",
+	            {layers: 'snowdonia:SNPA_Aerial_Photography', STYLES: '', format: "image/png", transparent: true, tilesOrigin: "246000,294000"} 
+	        );
+			var lyr_maxextent = new OpenLayers.Bounds(246000,294000,302000,380000);
+			ap_wms.maxExtent = lyr_maxextent;
+			ap_wms.setVisibility(true);*/
+			
+			map.addLayers([Access_Land]);
+		
+		map.addControl(new OpenLayers.Control.PanZoomBar({
+			position : new OpenLayers.Pixel(2, 15)
+		}));
+		map.addControl(new OpenLayers.Control.LayerSwitcher());
+		map.addControl(new OpenLayers.Control.Navigation());
+		
+
+		map.zoomToExtent(bounds);
+
+		dojo.addOnLoad(sendForm);
+	};
+
+	function writeWMC() {
+		try {
+			var text = format.write(map);
+			return text;
+		} catch (err) {
+			alert(err);
+		}
+	}
+	
+	function postPrintRequest(){
+		var wmc_text = writeWMC();
+		//alert(wmc_text);
+		document.getElementById('wmc').value = wmc_text;
+		
+		document.getElementById('printform').submit();
+	}
+
+	function sendForm() {
+		var form = dojo.byId("printform");
+
+		/*dojo.connect(form, "onsubmit", function(event) {
+			//Stop the submit event since we want to control form submission.
+			dojo.stopEvent(event);
+			var wmc_text = writeWMC();
+			//alert(wmc_text);
+			document.getElementById('wmc').value = wmc_text;
+
+			var xhrArgs = {
+				form : dojo.byId("printform"),
+				handleAs : "text",
+				load : function(data) {
+					alert(data);
+				},
+				error : function(error) {
+					alert(error);
+				}
+			}
+			//Call the asynchronous xhrPost
+
+			var deferred = dojo.xhrPost(xhrArgs);
+		});*/
+	}
+</script>
+</head>
+<body onload="init()">
+	<h1 id="title">Print Map Test Page</h1>
+	<div id="map" class="smallmap"></div>
+	 <div id="scale">
+	<div id="print_panel" class="ppanel">
+		<form id="printform" action="/glastir-te-print/create">
+			<p>
+				<label>CRN : 100456789</label> <input type="hidden" id="crn"
+					name="crn" value="100456789" />
+
+			</p>
+			<p>
+				<label>Title</label> <input name="title" type="text" />
+			</p>
+			<p>
+				<label>Description</label> <input name="desc" type="text" />
+			</p>
+
+			<p>
+				<label>Size</label> <select name="papersize">
+					<!--<option value="a3">A3</option>-->
+					<option value="a4">A4</option>
+				</select>
+			</p>
+			<p>
+
+				<label>Orientation</label> <select name="orientation">
+					<option value="landscape">Landscape</option>
+					<!--<option value="portrait">Portrait</option>-->
+				</select>
+			</p>
+			<p>
+				<label>Size</label> <select name="lang">
+					<option value="en">English</option>
+					<option value="cy">Welsh</option>
+				</select>
+			</p>
+			<input type="hidden" id="wmc" name="wmc" />
+
+			<p>
+				<!--<input type="submit" id="print" value="Print" />-->
+				 <input type="button" id="print" value="Print" onclick="postPrintRequest();" />
+			</p>
+		</form>
+
+	</div>
+	</div>
+	<!--<a href = "/glastir-te-print/create?file=c:/temp">Open File</a>-->
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>spatialVue-report</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<context-param>
+		<param-name>pdf-save-path</param-name>
+		<param-value>c:/temp/</param-value>
+	</context-param>
+	<context-param>
+		<param-name>print-per-session</param-name>
+		<param-value>5</param-value>
+	</context-param>
+
+
+	<servlet>
+		<servlet-name>CreateReport</servlet-name>
+		<servlet-class>com.rmsi.glastir.report.CreateReport</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CreateReport</servlet-name>
+		<url-pattern>/create</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

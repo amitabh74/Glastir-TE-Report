@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <list-property name="configVars">
+        <structure>
+            <property name="name">__isdisplay__imgurl_26_0</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__title_85_1</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__crn_86_2</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">__isdisplay__scale_87_3</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">scale_87_4</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">scale_87_type_</property>
+            <property name="value">string</property>
+        </structure>
+        <structure>
+            <property name="name">title_85_5</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">title_85_type_</property>
+            <property name="value">string</property>
+        </structure>
+        <structure>
+            <property name="name">crn_86_6</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">crn_86_type_</property>
+            <property name="value">string</property>
+        </structure>
+        <structure>
+            <property name="name">imgurl_26_7</property>
+            <property name="value">1</property>
+        </structure>
+        <structure>
+            <property name="name">imgurl_26_type_</property>
+            <property name="value">string</property>
+        </structure>
+    </list-property>
+</report>
